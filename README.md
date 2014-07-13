@@ -1,4 +1,4 @@
-EventEmitter [![Build Status](https://travis-ci.org/raix/Meteor-EventEmitter.png?branch=master)](https://travis-ci.org/raix/Meteor-EventEmitter)
+EventEmitter [![Build Status](https://travis-ci.org/raix/Meteor-EventEmitter.svg)](https://travis-ci.org/raix/Meteor-EventEmitter)
 ============
 
 Api should work like [Node.js](http://nodejs.org/api/events.html) on both client and server.
