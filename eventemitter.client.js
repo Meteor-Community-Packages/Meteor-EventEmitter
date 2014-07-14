@@ -1,24 +1,28 @@
 EventEmitter = function(options) {
   var self = this;
-  options = options || {};
   // Check that the user uses "new" keyword for api consistency
-  if (!(this instanceof EventEmitter))
-    throw new Error('EventEmitter missing "new" keyword');
+  if (! (self instanceof EventEmitter))                                                           // 6
+    throw new Error('use "new" to construct an EventEmitter');  
 
-  self.onListeners = {};
-  self.onceListeners = {};
-  self.maxListeners = options.maxListeners || 10;
+  options = options || {};
+
+  // Hidden scope
+  self._eventEmitter = {  
+    onListeners: {},
+    onceListeners: {},
+    maxListeners: options.maxListeners || 10
+  };
 };
 
-EventEmitter.prototype._checkListenerLimit = function(eventName, listenerCount) {
+var _checkListenerLimit = function(eventName, listenerCount) {
   var self = this;
   // Check if we are to send a warning
-  if (self.maxListeners && listenerCount > self.maxListeners) {
+  if (self._eventEmitter.maxListeners && listenerCount > self._eventEmitter.maxListeners) {
     // Return string
     return 'warning: possible EventEmitter memory leak detected. ' +
         listenerCount + ' listeners added on event "' + eventName +
         '". Use emitter.setMaxListeners() to increase limit. (' +
-        self.maxListeners + ')';
+        self._eventEmitter.maxListeners + ')';
       
   }  
 };
@@ -28,10 +32,10 @@ EventEmitter.prototype._checkListenerLimit = function(eventName, listenerCount) 
 // memory leaks. Obviously not all Emitters should be limited to 10. This function
 // allows that to be increased. Set to zero for unlimited.
 EventEmitter.prototype.setMaxListeners = function(n) {
-  this.maxListeners = n;
+  this._eventEmitter.maxListeners = n;
 };
 
-EventEmitter.prototype._addToList = function(list, eventName, listener) {
+var _addToList = function(list, eventName, listener) {
   var self = this;
   // Check that we have a container for the event, Create listener array
   if (typeof list[eventName] == 'undefined') list[eventName] = [];
@@ -41,7 +45,7 @@ EventEmitter.prototype._addToList = function(list, eventName, listener) {
   // list[eventName] = _.without(list[eventName], listener);
 
   // Add the listener and Check the limit
-  return self._checkListenerLimit(eventName, list[eventName].push(listener));
+  return _checkListenerLimit.apply(this, [eventName, list[eventName].push(listener)]);
 };
 
 // Adds a listener to the end of the listeners array for the specified event.
@@ -50,7 +54,7 @@ EventEmitter.prototype._addToList = function(list, eventName, listener) {
 // });
 // Returns emitter, so calls can be chained.
 EventEmitter.prototype.on = function(eventName, listener) {
-  var warn = this._addToList(this.onListeners, eventName, listener);
+  var warn = _addToList.apply(this, [this._eventEmitter.onListeners, eventName, listener]);
 
   // Warn if needed
   if (warn) console.warn((new Error(warn)).stack);
@@ -62,7 +66,7 @@ EventEmitter.prototype.on = function(eventName, listener) {
 // Adds a one time listener for the event. This listener is invoked
 // only the next time the event is fired, after which it is removed.
 EventEmitter.prototype.once = function(eventName, listener) {
-  var warn = this._addToList(this.onceListeners, eventName, listener);
+  var warn = _addToList.apply(this, [this._eventEmitter.onceListeners, eventName, listener]);
 
   // Warn if needed
   if (warn) console.warn((new Error(warn)).stack);
@@ -103,13 +107,13 @@ EventEmitter.prototype.emit = function(eventName /* arguments */) {
   var count = 0;
 
   // Swap once list
-  var onceList = self.onceListeners[eventName];
+  var onceList = self._eventEmitter.onceListeners[eventName];
 
   // Empty the once list
-  self.onceListeners[eventName] = [];
+  self._eventEmitter.onceListeners[eventName] = [];
 
   // Trigger on listeners
-  count += _runCallbacks(self.onListeners[eventName], args);
+  count += _runCallbacks(self._eventEmitter.onListeners[eventName], args);
 
   // Trigger once listeners
   count += _runCallbacks(onceList, args);
@@ -143,24 +147,24 @@ EventEmitter.prototype.off = function(eventName, listener) {
     if (typeof listener == 'function') {
       // its a bit more tricky - we have to iterate over the arrays and only
       // clone listeners not equal to
-      if (typeof self.onListeners[eventName] !== 'undefined') {
-        self.onListeners[eventName] = _withoutOne(self.onListeners[eventName], listener);
+      if (typeof self._eventEmitter.onListeners[eventName] !== 'undefined') {
+        self._eventEmitter.onListeners[eventName] = _withoutOne(self._eventEmitter.onListeners[eventName], listener);
         
       }
-      if (typeof self.onceListeners[eventName] !== 'undefined') {
-        self.onceListeners[eventName] = _withoutOne(self.onceListeners[eventName], listener);
+      if (typeof self._eventEmitter.onceListeners[eventName] !== 'undefined') {
+        self._eventEmitter.onceListeners[eventName] = _withoutOne(self._eventEmitter.onceListeners[eventName], listener);
         
       }
     } else {
       // Remove all listeners for eventName
-      self.onListeners[eventName] = [];
-      self.onceListeners[eventName] = [];
+      self._eventEmitter.onListeners[eventName] = [];
+      self._eventEmitter.onceListeners[eventName] = [];
     }
 
   } else {
     // Remove all listeners
-    self.onListeners = {};
-    self.onceListeners = {};
+    self._eventEmitter.onListeners = {};
+    self._eventEmitter.onceListeners = {};
   }
 };
 
