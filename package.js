@@ -1,10 +1,11 @@
 Package.describe({
+  name: "raix:eventemitter",
   version: '0.0.1',
   summary: "A server and client event package."
 });
 
 Package.on_use(function (api) {
-	api.use(['underscore'])
+	api.use(['underscore@1.0.0'])
 
   api.add_files('eventemitter.client.js', 'client');
 
@@ -15,7 +16,7 @@ Package.on_use(function (api) {
 
 
 Package.on_test(function (api) {
-  api.use(['eventemitter']);
+  api.use(['raix:eventemitter']);
   api.use('test-helpers', ['server', 'client']);
   api.use('tinytest');
 
