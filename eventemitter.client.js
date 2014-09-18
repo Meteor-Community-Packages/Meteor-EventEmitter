@@ -2,12 +2,12 @@ EventEmitter = function(options) {
   var self = this;
   // Check that the user uses "new" keyword for api consistency
   if (! (self instanceof EventEmitter))                                                           // 6
-    throw new Error('use "new" to construct an EventEmitter');  
+    throw new Error('use "new" to construct an EventEmitter');
 
   options = options || {};
 
   // Hidden scope
-  self._eventEmitter = {  
+  self._eventEmitter = {
     onListeners: {},
     onceListeners: {},
     maxListeners: options.maxListeners || 10
@@ -23,8 +23,8 @@ var _checkListenerLimit = function(eventName, listenerCount) {
         listenerCount + ' listeners added on event "' + eventName +
         '". Use emitter.setMaxListeners() to increase limit. (' +
         self._eventEmitter.maxListeners + ')';
-      
-  }  
+
+  }
 };
 
 // By default EventEmitters will print a warning if more than 10 listeners are
@@ -102,7 +102,7 @@ EventEmitter.prototype.emit = function(eventName /* arguments */) {
   var self = this;
   // make argument list to pass on to listeners
   var args = _.rest(arguments);
-  
+
   // Count listeners triggered
   var count = 0;
 
@@ -117,7 +117,7 @@ EventEmitter.prototype.emit = function(eventName /* arguments */) {
 
   // Trigger once listeners
   count += _runCallbacks(onceList, args);
-  
+
   // Returns true if event had listeners, false otherwise.
   return (count > 0);
 };
@@ -149,11 +149,11 @@ EventEmitter.prototype.off = function(eventName, listener) {
       // clone listeners not equal to
       if (typeof self._eventEmitter.onListeners[eventName] !== 'undefined') {
         self._eventEmitter.onListeners[eventName] = _withoutOne(self._eventEmitter.onListeners[eventName], listener);
-        
+
       }
       if (typeof self._eventEmitter.onceListeners[eventName] !== 'undefined') {
         self._eventEmitter.onceListeners[eventName] = _withoutOne(self._eventEmitter.onceListeners[eventName], listener);
-        
+
       }
     } else {
       // Remove all listeners for eventName

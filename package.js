@@ -1,11 +1,18 @@
 Package.describe({
   name: "raix:eventemitter",
-  version: '0.0.1',
+  version: '0.0.2',
   summary: "A server and client event package."
 });
 
 Package.on_use(function (api) {
-	api.use(['underscore@1.0.0'])
+
+  if (api.versionsFrom) {
+
+    api.versionsFrom('METEOR@0.9.1');
+
+  }
+
+  api.use(['underscore']);
 
   api.add_files('eventemitter.client.js', 'client');
 
