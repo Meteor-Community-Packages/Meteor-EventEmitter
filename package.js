@@ -23,7 +23,11 @@ Package.on_use(function (api) {
 
 
 Package.on_test(function (api) {
-  api.use(['raix:eventemitter']);
+  if (api.versionsFrom) {
+    api.use(['raix:eventemitter']);
+  } else {
+    api.use(['eventemitter']);
+  }
   api.use('test-helpers', ['server', 'client']);
   api.use('tinytest');
 
