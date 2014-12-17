@@ -85,10 +85,7 @@ var _runCallbacks = function(listenerArray, args) {
       // Count listener calls
       count++;
       // Send the job to the eventloop
-      Meteor.setTimeout(function emittedEvent() {
-        // We'll let the event loop call the listener
-        listener.apply(window, args);
-      }, 0);
+      listener.apply(window, args);
     });
   }
 
