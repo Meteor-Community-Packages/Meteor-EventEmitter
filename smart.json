@@ -1,9 +1,0 @@
-{
-  "name": "eventemitter",
-  "description": "EventEmitter for client and server",
-  "homepage": "https://github.com/raix/Meteor-EventEmitter",
-  "author": "Morten Henriksen  (http://gi-software.com)",
-  "version": "0.0.1",
-  "git": "https://github.com/raix/Meteor-EventEmitter.git",
-  "packages": {}
-}
