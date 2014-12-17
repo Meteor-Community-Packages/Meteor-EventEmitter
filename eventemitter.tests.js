@@ -243,18 +243,15 @@ Tinytest.addAsync('emitter - test when got a failing listener', function(test, c
   var emitterA = new EventEmitter();
 
   var counter = 0;
-  var expectedCount = 12;
+  var expectedCount = 2;
 
   var knownListener = function() {
     counter++;
   }
 
   var failListener = function() {
-    // XXX: A failing listener will fail the test on server
-    if (Meteor.isClient) {
-      throw new Error('Failing listener');
-      counter++;
-    }
+    throw new Error('Failing listener');
+    counter++;
   }
 
   emitterA.on('test', knownListener); // 1
@@ -270,21 +267,13 @@ Tinytest.addAsync('emitter - test when got a failing listener', function(test, c
   emitterA.once('test', knownListener);
 
 
-  emitterA.emit('test', 'Hello'); // 8
-
-  emitterA.emit('test', 'Hello'); // 4
-
-
-  // wait for result
-  Meteor.setTimeout(function() {
-    if (counter < expectedCount) {
-      test.fail('We are missing some callbacks ' + counter + ' expected ' + expectedCount);
-    }
-    if (counter > expectedCount) {
-      test.fail('We are getting too many callbacks ' + counter + ' expected ' + expectedCount);
-    }
-    completed();      
-  }, 10);
+  try {
+    emitterA.emit('test', 'Hello');
+    test.fail("tests needs to be failed!");
+  } catch(ex) {
+    test.equal(counter, expectedCount);
+    completed();
+  } 
 });
 //Test API:
 //test.isFalse(v, msg)
