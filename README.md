@@ -22,4 +22,36 @@ Wrapper apis jQuery like:
 
 Tests are covered and will be extended as issues demand.
 
+# Usage
+Creating EventEmitter object
+```
+Meteor.isClient() {
+    Event = new EventEmitter();
+}
+```
+
+Emitting event
+```
+Event.emit('customEvent', {
+    data: bar
+});
+```
+
+
+Listening the event (at a template for instance)
+```
+var listener;
+Template.example.created = function() {
+    listener = function(bar) {
+        console.log('Listening custom event', bar);
+    };
+    Event.on('customEvent', listener);
+}
+
+Template.example.destroyed = function() {
+    Event.removeListener('customEvent', listener);
+}
+
+```
+
 Kind regards RaiX
