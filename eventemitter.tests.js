@@ -75,7 +75,7 @@ Tinytest.addAsync('emitter - test on and once', function(test, completed) {
     if (counter > expectedCount) {
       test.fail('We are getting too many callbacks ' + counter + ' expected ' + expectedCount);
     }
-    completed();      
+    completed();
   }, 10);
 });
 
@@ -112,7 +112,7 @@ Tinytest.addAsync('emitter - test remove listener', function(test, completed) {
     if (counter > expectedCount) {
       test.fail('We are getting too many callbacks ' + counter + ' expected ' + expectedCount);
     }
-    completed();      
+    completed();
   }, 10);
 });
 
@@ -149,7 +149,7 @@ Tinytest.addAsync('emitter - test remove all listeners', function(test, complete
     if (counter > expectedCount) {
       test.fail('We are getting too many callbacks ' + counter + ' expected ' + expectedCount);
     }
-    completed();      
+    completed();
   }, 10);
 });
 
@@ -191,7 +191,7 @@ Tinytest.addAsync('emitter - test one listener', function(test, completed) {
     if (counter > expectedCount) {
       test.fail('We are getting too many callbacks ' + counter + ' expected ' + expectedCount);
     }
-    completed();      
+    completed();
   }, 10);
 });
 
@@ -235,7 +235,7 @@ Tinytest.addAsync('emitter - test only add known listener once', function(test, 
     if (counter > expectedCount) {
       test.fail('We are getting too many callbacks ' + counter + ' expected ' + expectedCount);
     }
-    completed();      
+    completed();
   }, 10);
 });
 
@@ -273,7 +273,19 @@ Tinytest.addAsync('emitter - test when got a failing listener', function(test, c
   } catch(ex) {
     test.equal(counter, expectedCount);
     completed();
-  } 
+  }
+});
+
+Tinytest.addAsync('emitter - test listener scope #7', function(test, completed) {
+  var em = new EventEmitter();
+
+  em.addListener('testScope', function() {
+    test.instanceOf(this, EventEmitter);
+    test.isTrue(this === em, 'Listener scope should be the eventemitter instance');
+    completed();
+  });
+
+  em.emit('testScope');
 });
 //Test API:
 //test.isFalse(v, msg)
