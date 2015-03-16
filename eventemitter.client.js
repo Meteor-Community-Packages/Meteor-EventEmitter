@@ -76,6 +76,7 @@ EventEmitter.prototype.once = function(eventName, listener) {
 };
 
 var _runCallbacks = function(listenerArray, args) {
+  var self = this;
   // count of listeners triggered
   var count = 0;
   // Check if we have anything to work with
@@ -85,7 +86,7 @@ var _runCallbacks = function(listenerArray, args) {
       // Count listener calls
       count++;
       // Send the job to the eventloop
-      listener.apply(window, args);
+      listener.apply(self, args);
     });
   }
 
@@ -110,10 +111,10 @@ EventEmitter.prototype.emit = function(eventName /* arguments */) {
   self._eventEmitter.onceListeners[eventName] = [];
 
   // Trigger on listeners
-  count += _runCallbacks(self._eventEmitter.onListeners[eventName], args);
+  count += _runCallbacks.call(self, self._eventEmitter.onListeners[eventName], args);
 
   // Trigger once listeners
-  count += _runCallbacks(onceList, args);
+  count += _runCallbacks.call(self, onceList, args);
 
   // Returns true if event had listeners, false otherwise.
   return (count > 0);
