@@ -1,8 +1,10 @@
+/* global EventEmitter: true */
 EventEmitter = function(options) {
   var self = this;
   // Check that the user uses "new" keyword for api consistency
-  if (! (self instanceof EventEmitter))                                                           // 6
+  if (! (self instanceof EventEmitter)) {
     throw new Error('use "new" to construct an EventEmitter');
+  }
 
   options = options || {};
 
@@ -36,9 +38,10 @@ EventEmitter.prototype.setMaxListeners = function(n) {
 };
 
 var _addToList = function(list, eventName, listener) {
-  var self = this;
   // Check that we have a container for the event, Create listener array
-  if (typeof list[eventName] == 'undefined') list[eventName] = [];
+  if (typeof list[eventName] === 'undefined') {
+    list[eventName] = [];
+  }
 
   // Make sure the listener is not in there already?
   // We have to comment this to be compliant with node.js
@@ -57,10 +60,12 @@ EventEmitter.prototype.on = function(eventName, listener) {
   var warn = _addToList.apply(this, [this._eventEmitter.onListeners, eventName, listener]);
 
   // Warn if needed
-  if (warn) console.warn((new Error(warn)).stack);
+  if (warn) {
+    console.warn((new Error(warn)).stack);
+  }
 
   // Return the emitter
-  return self;
+  return this;
 };
 
 // Adds a one time listener for the event. This listener is invoked
@@ -69,10 +74,12 @@ EventEmitter.prototype.once = function(eventName, listener) {
   var warn = _addToList.apply(this, [this._eventEmitter.onceListeners, eventName, listener]);
 
   // Warn if needed
-  if (warn) console.warn((new Error(warn)).stack);
+  if (warn) {
+    console.warn((new Error(warn)).stack);
+  }
 
   // Return the emitter
-  return self;
+  return this;
 };
 
 var _runCallbacks = function(listenerArray, args) {
@@ -126,9 +133,14 @@ var _withoutOne = function(list, obj) {
   var result = [];
 
   // Iterate over listeners
-  for (var i = 0; i < list.length; i++)
+  for (var i = 0; i < list.length; i++) {
     // Check if we found one...
-    if (!found && list[i] === obj) found = true; else result.push(list[i]);
+    if (!found && list[i] === obj) {
+      found = true;
+    } else {
+      result.push(list[i]);
+    }
+  }
 
   // return the new array
   return result;
@@ -142,7 +154,7 @@ var _withoutOne = function(list, obj) {
 EventEmitter.prototype.off = function(eventName, listener) {
   var self = this;
   if (eventName) {
-    if (typeof listener == 'function') {
+    if (typeof listener === 'function') {
       // its a bit more tricky - we have to iterate over the arrays and only
       // clone listeners not equal to
       if (typeof self._eventEmitter.onListeners[eventName] !== 'undefined') {

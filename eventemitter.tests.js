@@ -1,7 +1,4 @@
-function equals(a, b) {
-  return !!(EJSON.stringify(a) === EJSON.stringify(b));
-}
-
+/* global EventEmitter: true */
 var noop = function() {};
 
 Tinytest.add('emitter - test environment', function(test) {
@@ -9,11 +6,12 @@ Tinytest.add('emitter - test environment', function(test) {
 });
 
 
-Tinytest.add('emitter - test more than 10 listeners warning', function(test) {
+Tinytest.add('emitter - test more than 10 listeners warning', function() {
   // This is actually just a test to see if we get a warning about +10 listeners
   var emitter = new EventEmitter();
-  for (var i = 0; i < 11; i++)
+  for (var i = 0; i < 11; i++) {
     emitter.on('test', noop);
+  }
 });
 
 Tinytest.addAsync('emitter - test basic event', function(test, completed) {
@@ -204,7 +202,7 @@ Tinytest.addAsync('emitter - test only add known listener once', function(test, 
 
   var knownListener = function() {
     counter++;
-  }
+  };
 
   emitterA.on('test', knownListener); // 1
   emitterA.on('test', knownListener); // 2
@@ -247,12 +245,12 @@ Tinytest.addAsync('emitter - test when got a failing listener', function(test, c
 
   var knownListener = function() {
     counter++;
-  }
+  };
 
   var failListener = function() {
     throw new Error('Failing listener');
-    counter++;
-  }
+    // counter++;
+  };
 
   emitterA.on('test', knownListener); // 1
   emitterA.on('test', knownListener); // 2
