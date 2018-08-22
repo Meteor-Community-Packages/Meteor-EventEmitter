@@ -89,7 +89,7 @@ var _runCallbacks = function(listenerArray, args) {
   // Check if we have anything to work with
   if (typeof listenerArray !== 'undefined') {
     // Try to iterate over the listeners
-    _.each(listenerArray, function(listener) {
+    listenerArray.forEach(function(listener) {
       // Count listener calls
       count++;
       // Send the job to the eventloop
@@ -106,7 +106,7 @@ var _runCallbacks = function(listenerArray, args) {
 EventEmitter.prototype.emit = function(eventName /* arguments */) {
   var self = this;
   // make argument list to pass on to listeners
-  var args = _.rest(arguments);
+  var args = Array.prototype.slice.call(arguments, 1);
 
   // Count listeners triggered
   var count = 0;
