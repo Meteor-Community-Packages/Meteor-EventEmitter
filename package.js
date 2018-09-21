@@ -9,8 +9,6 @@ Package.onUse(function (api) {
 
   api.versionsFrom('1.0');
 
-  api.use(['underscore']);
-
   api.addFiles('eventemitter.client.js', 'client');
 
   api.addFiles('eventemitter.server.js', 'server');
