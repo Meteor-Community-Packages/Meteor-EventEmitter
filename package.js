@@ -1,6 +1,6 @@
 Package.describe({
   name: "raix:eventemitter",
-  version: '0.1.3',
+  version: '1.0.0',
   summary: "A server and client event package.",
   git: "https://github.com/raix/Meteor-EventEmitter.git"
 });
