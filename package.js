@@ -7,7 +7,7 @@ Package.describe({
 });
 
 Package.onUse(function (api) {
-  api.versionsFrom(['1.0', '2.8.0', '3.0']);
+  api.versionsFrom(['2.3', '2.8.0', '3.0']);
   api.addFiles('eventemitter.client.js', 'client');
   api.addFiles('eventemitter.server.js', 'server');
   api.export('EventEmitter');
@@ -15,7 +15,6 @@ Package.onUse(function (api) {
 
 
 Package.onTest(function (api) {
-  api.versionsFrom(['1.0', '2.8.0', '3.0']);
   api.use(['raix:eventemitter']);
   api.use('test-helpers', ['server', 'client']);
   api.use('tinytest');
