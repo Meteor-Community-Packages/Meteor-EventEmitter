@@ -1,7 +1,11 @@
-raix:eventemitter [![Build Status](https://travis-ci.org/raix/Meteor-EventEmitter.svg)](https://travis-ci.org/raix/Meteor-EventEmitter)
-============
+# raix:eventemitter
 
-Api should work like [Node.js EventEmitter](http://nodejs.org/api/events.html) on both client and server.
+Isomorphic api for EventEmitter on server and browser,
+should work like [Node.js EventEmitter](http://nodejs.org/api/events.html) on both client and server.
+
+> note: this package is flagged as deprecated and maintained for package-version support.
+> if you need an isomorphic event listener then look out for npm packages like
+> eventlistener3 or nano events.
 
 Overview:
 * EventEmitter
@@ -22,7 +26,7 @@ Wrapper apis jQuery like:
 
 Tests are covered and will be extended as issues demand.
 
-# Usage
+## Usage
 Creating EventEmitter object
 ```
 Meteor.isClient() {
